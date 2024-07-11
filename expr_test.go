@@ -2736,3 +2736,17 @@ func TestExpr_env_types_map_error(t *testing.T) {
 	_, err = expr.Run(program, envTypes)
 	require.Error(t, err)
 }
+
+func TestExpr_named_types(t *testing.T) {
+	type named int
+	env := map[string]any{
+		"namedInt": func() named { return 42 },
+	}
+
+	program, err := expr.Compile(`namedInt() == 42`, expr.Env(env))
+	require.NoError(t, err)
+
+	val, err := expr.Run(program, env)
+	require.NoError(t, err)
+	assert.True(t, val.(bool))
+}

@@ -696,6 +696,13 @@ func Equal(a, b interface{}) bool {
 	if IsNil(a) && IsNil(b) {
 		return true
 	}
+
+	aBasic, aUnpacked := unpackBasicType(a)
+	bBasic, bUnpacked := unpackBasicType(b)
+	if aUnpacked || bUnpacked {
+		return Equal(aBasic, bBasic)
+	}
+
 	return reflect.DeepEqual(a, b)
 }
 

@@ -175,6 +175,9 @@ func Equal(a, b interface{}) bool {
 	if IsNil(a) && IsNil(b) {
 		return true
 	}
+	if Equal(unpackBasicType(a), unpackBasicType(b)) {
+		return true
+	}
 	return reflect.DeepEqual(a, b)
 }
 
@@ -196,6 +199,9 @@ func Less(a, b interface{}) bool {
 		case time.Duration:
 			return x < y
 		}
+	}
+	if Less(unpackBasicType(a), unpackBasicType(b)) {
+		return true
 	}
 	panic(fmt.Sprintf("invalid operation: %T < %T", a, b))
 }

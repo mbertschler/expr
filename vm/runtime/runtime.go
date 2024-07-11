@@ -392,3 +392,23 @@ func IsNil(v any) bool {
 		return false
 	}
 }
+
+func unpackBasicType(a any) (val any, unpacked bool) {
+	r := reflect.ValueOf(a)
+	if r.Type().PkgPath() == "" {
+		return a, false
+	}
+	switch r.Kind() {
+	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+		return r.Int(), true
+	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
+		return r.Uint(), true
+	case reflect.Float32, reflect.Float64:
+		return r.Float(), true
+	case reflect.Bool:
+		return r.Bool(), true
+	case reflect.String:
+		return r.String(), true
+	}
+	return a, false
+}
